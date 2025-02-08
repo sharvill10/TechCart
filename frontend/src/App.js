@@ -1,9 +1,18 @@
-import React from 'react'
+import React from "react";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import { Outlet } from "react-router-dom";
 
 const App = () => {
   return (
-    <div>Welcome to TechCart</div>
-  )
-}
+    <div className="min-h-screen flex flex-col">
+      <Header />
 
-export default App
+      <Outlet />
+
+      <Footer />
+    </div>
+  );
+};
+
+export default App;
