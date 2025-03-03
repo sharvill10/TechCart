@@ -5,7 +5,11 @@ import {
   ChevronLeft,
   ChevronRight,
   Minus,
-  Plus
+  Plus,
+  Star,
+  Calendar,
+  Box,
+  Tag
 } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -26,9 +30,6 @@ const ProductScreen = () => {
     isError,
     error
   } = useGetProductDetailsQuery({ productId });
-
-  console.log(product);
-  
 
   if (isLoading) {
     return (
@@ -94,7 +95,14 @@ const ProductScreen = () => {
 
   const addToCartHandler = () => {
     dispatch(addToCart({ ...product, qty }));
-    navigate('/cart');
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   };
 
   return (
@@ -136,17 +144,53 @@ const ProductScreen = () => {
             </div>
 
             <div className="md:w-1/2 p-6 space-y-6">
-              <h1 className="text-3xl font-bold text-blue-900">{product.name}</h1>
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <Tag className="w-4 h-4 text-blue-600" />
+                  <span className="text-sm text-blue-600 font-medium">{product.brand}</span>
+                  <span className="text-gray-300">|</span>
+                  <Box className="w-4 h-4 text-blue-600" />
+                  <span className="text-sm text-blue-600 font-medium">{product.category}</span>
+                </div>
+                <h1 className="text-3xl font-bold text-blue-900">{product.name}</h1>
+              </div>
+
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center">
+                  {[...Array(5)].map((_, index) => (
+                    <Star
+                      key={index}
+                      className={`w-5 h-5 ${
+                        index < product.rating 
+                          ? 'text-yellow-400 fill-yellow-400' 
+                          : 'text-gray-300'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className="text-gray-600">({product.numReviews} reviews)</span>
+              </div>
+              
               <p className="text-gray-600 text-base">{product.description}</p>
               
               <div className="flex items-center justify-between bg-blue-50 p-4 rounded-lg">
-                <div className="text-3xl font-bold text-blue-700">${(product?.price || 0).toFixed(2)}</div>
-                <div className={`px-3 py-1 rounded-full text-sm font-semibold ${product?.countInStock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                  {product?.countInStock > 0 ? 'In Stock' : 'Out of Stock'}
+                <div className="text-3xl font-bold text-blue-700">${product.price.toFixed(2)}</div>
+                <div className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                  product.countInStock > 0 
+                    ? 'bg-green-100 text-green-800' 
+                    : 'bg-red-100 text-red-800'
+                }`}>
+                  {product.countInStock > 0 
+                    ? `${product.countInStock} in Stock` 
+                    : 'Out of Stock'}
                 </div>
               </div>
 
-              {/* Quantity Selector */}
+              <div className="flex items-center space-x-2 text-sm text-gray-500">
+                <Calendar className="w-4 h-4" />
+                <span>Listed on {formatDate(product.createdAt)}</span>
+              </div>
+
               {product.countInStock > 0 && (
                 <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
                   <button 
