@@ -2,6 +2,7 @@ import React from "react";
 import { ProductCard } from "../components/ProductCard";
 import { useGetProductsQuery } from "../slices/productApiSlice";
 
+
 const HomeScreen = () => {
   const { data: products, isLoading, error } = useGetProductsQuery();
   

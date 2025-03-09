@@ -5,6 +5,7 @@ import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import cookieParser from 'cookie-parser';
+import path from 'path';
 
 dotenv.config();
 const port = process.env.PORT || 5002;
@@ -21,12 +22,20 @@ app.use(cookieParser()); // Add this line
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/config/paypal', (req, res) => res.send({clientId: process.env.PAYPAL_CLIENT_ID}))
 
-// Default route to check if the API is running
-app.get('/', (req, res) => {
-  res.send('API IS RUNNING');
-});
+if (process.env.NODE_ENV === 'production') {
+  const __dirname = path.resolve();
+  app.use(express.static(path.join(__dirname, '/frontend/build')));
 
+  app.get('*', (req, res) =>
+    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
+  );
+} else {
+  app.get('/', (req, res) => {
+    res.send('API is running....');
+  });
+}
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

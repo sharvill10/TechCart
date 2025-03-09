@@ -1,70 +1,82 @@
 import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-// import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 import { toast } from 'react-toastify';
-// import Message from '../components/Message';
-// import Loader from '../components/Loader';
 import {
   useDeliverOrderMutation,
   useGetOrderDetailsQuery,
-  useGetPaypalClientIdQuery,
   usePayOrderMutation,
 } from '../slices/ordersApiSlice';
 
+// Simple Loader component
+const Loader = () => (
+  <div className="flex justify-center items-center">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+  </div>
+);
+
+// Simple Message component
+const Message = ({ children, variant }) => {
+  const getVariantClasses = () => {
+    switch (variant) {
+      case 'success':
+        return 'bg-green-100 text-green-700 border-green-400';
+      case 'danger':
+        return 'bg-red-100 text-red-700 border-red-400';
+      default:
+        return 'bg-blue-100 text-blue-700 border-blue-400';
+    }
+  };
+
+  return (
+    <div className={`p-4 mb-4 border rounded-lg ${getVariantClasses()}`}>
+      {children}
+    </div>
+  );
+};
+
 const OrderScreen = () => {
   const { id: orderId } = useParams();
-  const { data: order, refetch, isLoading, error } = useGetOrderDetailsQuery(orderId);
+  
+  const {
+    data: order,
+    refetch,
+    isLoading,
+    error,
+  } = useGetOrderDetailsQuery(orderId);
+  
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
+  
   const [deliverOrder, { isLoading: loadingDeliver }] = useDeliverOrderMutation();
+  
   const { userInfo } = useSelector((state) => state.auth);
-//   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
-  const { data: paypal, isLoading: loadingPayPal, error: errorPayPal } = useGetPaypalClientIdQuery();
 
-//   useEffect(() => {
-//     if (!errorPayPal && !loadingPayPal && paypal?.clientId) {
-//       const loadPaypalScript = async () => {
-//         // paypalDispatch({
-//         //   type: 'resetOptions',
-//         //   value: { 'client-id': paypal.clientId, currency: 'USD' },
-//         // });
-//         paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
-//       };
-//       if (order && !order.isPaid && !window.paypal) {
-//         loadPaypalScript();
-//       }
-//     }
-//   }, [errorPayPal, loadingPayPal, order, paypal, paypalDispatch]);
-
-  const onApprove = async (data, actions) => {
-    return actions.order.capture().then(async (details) => {
-      try {
-        await payOrder({ orderId, details });
-        refetch();
-        toast.success('Order is paid');
-      } catch (err) {
-        toast.error(err?.data?.message || err.error);
-      }
-    });
-  };
-
-  const createOrder = (data, actions) => {
-    return actions.order.create({
-      purchase_units: [{ amount: { value: order.totalPrice } }],
-    }).then(orderID => orderID);
-  };
-
-  const onError = (err) => toast.error(err.message);
+  // Test payment function
+  async function onApproveTest() {
+    try {
+      await payOrder({ orderId });
+      refetch();
+      toast.success('Order is paid');
+    } catch (err) {
+      console.error('Payment error:', err);
+      toast.error(err?.data?.message || err.error || 'Payment failed');
+    }
+  }
 
   const deliverHandler = async () => {
-    await deliverOrder(orderId);
-    refetch();
+    try {
+      await deliverOrder(orderId);
+      refetch();
+      toast.success('Order marked as delivered');
+    } catch (err) {
+      toast.error(err?.data?.message || err.error || 'Delivery status update failed');
+    }
   };
 
   return isLoading ? (
-   <></>
+    <Loader />
   ) : error ? (
-    <></>
+    <Message variant="danger">{error?.data?.message || error.error}</Message>
   ) : (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Order {order._id}</h1>
@@ -75,17 +87,25 @@ const OrderScreen = () => {
             <p><strong>Name:</strong> {order.user.name}</p>
             <p><strong>Email:</strong> <a href={`mailto:${order.user.email}`} className="text-blue-500">{order.user.email}</a></p>
             <p><strong>Address:</strong> {order.shippingAddress.address}, {order.shippingAddress.city}, {order.shippingAddress.postalCode}, {order.shippingAddress.country}</p>
-            {/* {order.isDelivered ? <Message variant="success">Delivered on {order.deliveredAt}</Message> : <Message variant="danger">Not Delivered</Message>} */}
+            {order.isDelivered ? (
+              <Message variant="success">Delivered on {order.deliveredAt}</Message>
+            ) : (
+              <Message variant="danger">Not Delivered</Message>
+            )}
           </div>
           <div className="p-4 border rounded-lg">
             <h2 className="text-xl font-semibold">Payment Method</h2>
             <p><strong>Method:</strong> {order.paymentMethod}</p>
-            {/* {order.isPaid ? <Message variant="success">Paid on {order.paidAt}</Message> : <Message variant="danger">Not Paid</Message>} */}
+            {order.isPaid ? (
+              <Message variant="success">Paid on {order.paidAt}</Message>
+            ) : (
+              <Message variant="danger">Not Paid</Message>
+            )}
           </div>
           <div className="p-4 border rounded-lg">
             <h2 className="text-xl font-semibold">Order Items</h2>
             {order.orderItems.length === 0 ? (
-              <h2>Order is empty</h2>
+              <Message>Order is empty</Message>
             ) : (
               <ul className="space-y-4">
                 {order.orderItems.map((item, index) => (
@@ -107,15 +127,30 @@ const OrderScreen = () => {
             <li className="flex justify-between"><span>Tax</span> <span>${order.taxPrice}</span></li>
             <li className="flex justify-between font-bold"><span>Total</span> <span>${order.totalPrice}</span></li>
           </ul>
-          {/* {!order.isPaid && (
-            <div className="mt-4">
+          {!order.isPaid && (
+            <div className="mt-4 p-4 border rounded-lg">
               {loadingPay && <Loader />}
-              {isPending ? <Loader /> : <PayPalButtons createOrder={createOrder} onApprove={onApprove} onError={onError} />}
+              
+              <button
+                className="w-full mb-4 p-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg font-bold"
+                onClick={onApproveTest}
+                disabled={loadingPay}
+              >
+                {loadingPay ? 'Processing...' : 'Pay Order'}
+              </button>
             </div>
-          )} */}
-          {loadingDeliver &&<></> }
+          )}
+          
+          {loadingDeliver && <Loader />}
+          
           {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
-            <button onClick={deliverHandler} className="w-full mt-4 p-2 bg-blue-500 text-white rounded-lg">Mark As Delivered</button>
+            <button 
+              onClick={deliverHandler} 
+              className="w-full mt-4 p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-bold"
+              disabled={loadingDeliver}
+            >
+              {loadingDeliver ? 'Processing...' : 'Mark As Delivered'}
+            </button>
           )}
         </div>
       </div>

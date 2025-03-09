@@ -13,10 +13,19 @@ import {
   Clock,
   Award,
   Settings,
-  AlertCircle
+  AlertCircle,
+  Package,
+  Calendar as CalendarIcon,
+  DollarSign,
+  Truck,
+  CreditCard,
+  ExternalLink,
+  FileText
 } from "lucide-react";
 import { setCredentials } from "../slices/authSlice";
 import { useProfileMutation } from "../slices/userApiSlice";
+import { useGetMyOrdersQuery } from "../slices/ordersApiSlice";
+import { Link } from "react-router-dom";
 
 const ProfileScreen = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -31,6 +40,7 @@ const ProfileScreen = () => {
   const dispatch = useDispatch();
 
   const [updateProfile, { isLoading }] = useProfileMutation();
+  const { data: orders, isLoading: ordersLoading, error: ordersError } = useGetMyOrdersQuery();
 
   // Get current date for the "Member since" display
   const currentDate = new Date().toLocaleDateString('en-US', {
@@ -131,9 +141,14 @@ const ProfileScreen = () => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
   };
 
+  // Function to format price
+  const formatPrice = (price) => {
+    return `$${Number(price).toFixed(2)}`;
+  };
+
   return (
-    <div className="min-h-screen bg-white py-12">
-      <div className="max-w-4xl mx-auto px-4">
+    <div className="min-h-screen bg-gray-50 py-12">
+      <div className="max-w-6xl mx-auto px-4">
         {/* Profile Card */}
         <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden mb-6">
           {/* Header with gradient pattern instead of banner */}
@@ -210,7 +225,7 @@ const ProfileScreen = () => {
         </div>
           
         {/* Profile Form Card */}
-        <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden mb-6">
           <div className="p-6">
             <div className="flex items-center gap-3 mb-6">
               <Settings className="w-6 h-6 text-blue-600" />
@@ -321,6 +336,108 @@ const ProfileScreen = () => {
                 </div>
               )}
             </form>
+          </div>
+        </div>
+
+        {/* Orders Card */}
+        <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+          <div className="p-6">
+            <div className="flex items-center gap-3 mb-6">
+              <Package className="w-6 h-6 text-blue-600" />
+              <h3 className="text-xl font-bold text-gray-800">My Orders</h3>
+            </div>
+            
+            {ordersLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Clock className="w-6 h-6 text-blue-600 animate-spin mr-2" />
+                <p className="text-blue-800">Loading your orders...</p>
+              </div>
+            ) : ordersError ? (
+              <div className="bg-red-50 border border-red-100 text-red-800 p-4 rounded-xl flex items-center space-x-2">
+                <AlertCircle size={18} className="text-red-600" />
+                <p>{ordersError?.data?.message || ordersError.error || "An error occurred loading your orders."}</p>
+              </div>
+            ) : orders && orders.length === 0 ? (
+              <div className="bg-blue-50 border border-blue-100 text-blue-800 p-6 rounded-xl flex flex-col items-center justify-center">
+                <Package className="w-12 h-12 text-blue-500 mb-3" />
+                <p className="text-center font-medium">You haven't placed any orders yet.</p>
+                <Link to="/" className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg inline-block">
+                  Start Shopping
+                </Link>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <div className="min-w-full rounded-xl overflow-hidden">
+                  <div className="bg-gray-50 p-4">
+                    <div className="grid grid-cols-12 gap-3 text-sm font-medium text-gray-600">
+                      <div className="col-span-2">ID</div>
+                      <div className="col-span-2">DATE</div>
+                      <div className="col-span-2">TOTAL</div>
+                      <div className="col-span-2">PAID</div>
+                      <div className="col-span-2">DELIVERED</div>
+                      <div className="col-span-2 text-right">ACTIONS</div>
+                    </div>
+                  </div>
+                  
+                  <div className="divide-y divide-gray-100">
+                    {orders.map((order) => (
+                      <div key={order._id} className="p-4 hover:bg-gray-50 transition-colors duration-150">
+                        <div className="grid grid-cols-12 gap-3 items-center">
+                          <div className="col-span-2 font-mono text-xs text-gray-600">{order._id}</div>
+                          <div className="col-span-2 flex items-center">
+                            <CalendarIcon size={14} className="text-gray-400 mr-1" />
+                            <span className="text-sm">{order.createdAt.substring(0, 10)}</span>
+                          </div>
+                          <div className="col-span-2 font-medium text-gray-800 flex items-center">
+                            <DollarSign size={14} className="text-green-600 mr-1" />
+                            {formatPrice(order.totalPrice)}
+                          </div>
+                          <div className="col-span-2">
+                            {order.isPaid ? (
+                              <div className="flex items-center">
+                                <span className="flex items-center space-x-1 bg-green-100 text-green-800 px-2 py-1 rounded-md text-xs">
+                                  <CreditCard size={12} />
+                                  <span>{order.paidAt.substring(0, 10)}</span>
+                                </span>
+                              </div>
+                            ) : (
+                              <span className="flex items-center space-x-1 bg-red-100 text-red-800 px-2 py-1 rounded-md text-xs">
+                                <X size={12} />
+                                <span>Not Paid</span>
+                              </span>
+                            )}
+                          </div>
+                          <div className="col-span-2">
+                            {order.isDelivered ? (
+                              <div className="flex items-center">
+                                <span className="flex items-center space-x-1 bg-green-100 text-green-800 px-2 py-1 rounded-md text-xs">
+                                  <Truck size={12} />
+                                  <span>{order.deliveredAt.substring(0, 10)}</span>
+                                </span>
+                              </div>
+                            ) : (
+                              <span className="flex items-center space-x-1 bg-amber-100 text-amber-800 px-2 py-1 rounded-md text-xs">
+                                <Clock size={12} />
+                                <span>Pending</span>
+                              </span>
+                            )}
+                          </div>
+                          <div className="col-span-2 text-right">
+                            <Link
+                              to={`/order/${order._id}`}
+                              className="inline-flex items-center space-x-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm transition-colors"
+                            >
+                              <FileText size={14} />
+                              <span>Details</span>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

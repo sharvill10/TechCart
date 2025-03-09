@@ -18,6 +18,8 @@ import { useGetProductDetailsQuery } from '../slices/productApiSlice';
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
+  console.log(productId, 'productId');
+  
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -29,7 +31,7 @@ const ProductScreen = () => {
     isLoading,
     isError,
     error
-  } = useGetProductDetailsQuery({ productId });
+  } = useGetProductDetailsQuery(productId);
 
   if (isLoading) {
     return (
