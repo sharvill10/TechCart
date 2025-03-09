@@ -1,7 +1,9 @@
 // ShippingScreen.js
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 import { saveShippingAddress } from '../slices/cartSlice';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { Home, MapPin, Mail, Globe, ArrowRight, Truck } from 'lucide-react';
@@ -10,17 +12,27 @@ const ShippingScreen = () => {
   const cart = useSelector((state) => state.cart);
   const { shippingAddress } = cart;
 
-  const [address, setAddress] = useState(shippingAddress.address || '');
-  const [city, setCity] = useState(shippingAddress.city || '');
-  const [postalCode, setPostalCode] = useState(shippingAddress.postalCode || '');
-  const [country, setCountry] = useState(shippingAddress.country || '');
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    dispatch(saveShippingAddress({ address, city, postalCode, country }));
+  // Define validation schema with Yup
+  const validationSchema = Yup.object({
+    address: Yup.string().required('Address is required'),
+    city: Yup.string().required('City is required'),
+    postalCode: Yup.string().required('Postal code is required'),
+    country: Yup.string().required('Country is required')
+  });
+
+  // Initial values from existing shipping address or empty strings
+  const initialValues = {
+    address: shippingAddress.address || '',
+    city: shippingAddress.city || '',
+    postalCode: shippingAddress.postalCode || '',
+    country: shippingAddress.country || ''
+  };
+
+  const submitHandler = (values) => {
+    dispatch(saveShippingAddress(values));
     navigate('/payment');
   };
 
@@ -36,89 +48,125 @@ const ShippingScreen = () => {
               <h1 className="text-2xl font-bold text-gray-800">Shipping Details</h1>
             </div>
             
-            <form onSubmit={submitHandler} className="space-y-5">
-              <div className="space-y-2">
-                <label className="block text-gray-700 text-sm font-medium" htmlFor="address">
-                  Address
-                </label>
-                <div className="relative">
-                  <Home size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
-                  <input
-                    type="text"
-                    id="address"
-                    placeholder="Enter your street address"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    className="w-full py-3 pl-10 pr-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="block text-gray-700 text-sm font-medium" htmlFor="city">
-                    City
-                  </label>
-                  <div className="relative">
-                    <MapPin size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
-                    <input
-                      type="text"
-                      id="city"
-                      placeholder="Enter your city"
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      className="w-full py-3 pl-10 pr-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
-                      required
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={submitHandler}
+            >
+              {({ errors, touched }) => (
+                <Form className="space-y-5">
+                  <div className="space-y-2">
+                    <label className="block text-gray-700 text-sm font-medium" htmlFor="address">
+                      Address
+                    </label>
+                    <div className="relative">
+                      <Home size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
+                      <Field
+                        type="text"
+                        id="address"
+                        name="address"
+                        placeholder="Enter your street address"
+                        className={`w-full py-3 pl-10 pr-3 border rounded-xl focus:ring-2 focus:ring-blue-200 focus:border-blue-400 ${
+                          errors.address && touched.address 
+                            ? 'border-red-500 focus:ring-red-200 focus:border-red-400' 
+                            : 'border-gray-300'
+                        }`}
+                      />
+                    </div>
+                    <ErrorMessage 
+                      name="address" 
+                      component="div" 
+                      className="text-red-500 text-sm mt-1" 
                     />
                   </div>
-                </div>
 
-                <div className="space-y-2">
-                  <label className="block text-gray-700 text-sm font-medium" htmlFor="postalCode">
-                    Postal Code
-                  </label>
-                  <div className="relative">
-                    <Mail size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
-                    <input
-                      type="text"
-                      id="postalCode"
-                      placeholder="Enter your postal code"
-                      value={postalCode}
-                      onChange={(e) => setPostalCode(e.target.value)}
-                      className="w-full py-3 pl-10 pr-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
-                      required
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="block text-gray-700 text-sm font-medium" htmlFor="city">
+                        City
+                      </label>
+                      <div className="relative">
+                        <MapPin size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
+                        <Field
+                          type="text"
+                          id="city"
+                          name="city"
+                          placeholder="Enter your city"
+                          className={`w-full py-3 pl-10 pr-3 border rounded-xl focus:ring-2 focus:ring-blue-200 focus:border-blue-400 ${
+                            errors.city && touched.city 
+                              ? 'border-red-500 focus:ring-red-200 focus:border-red-400' 
+                              : 'border-gray-300'
+                          }`}
+                        />
+                      </div>
+                      <ErrorMessage 
+                        name="city" 
+                        component="div" 
+                        className="text-red-500 text-sm mt-1" 
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-gray-700 text-sm font-medium" htmlFor="postalCode">
+                        Postal Code
+                      </label>
+                      <div className="relative">
+                        <Mail size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
+                        <Field
+                          type="text"
+                          id="postalCode"
+                          name="postalCode"
+                          placeholder="Enter your postal code"
+                          className={`w-full py-3 pl-10 pr-3 border rounded-xl focus:ring-2 focus:ring-blue-200 focus:border-blue-400 ${
+                            errors.postalCode && touched.postalCode 
+                              ? 'border-red-500 focus:ring-red-200 focus:border-red-400' 
+                              : 'border-gray-300'
+                          }`}
+                        />
+                      </div>
+                      <ErrorMessage 
+                        name="postalCode" 
+                        component="div" 
+                        className="text-red-500 text-sm mt-1" 
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-gray-700 text-sm font-medium" htmlFor="country">
+                      Country
+                    </label>
+                    <div className="relative">
+                      <Globe size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
+                      <Field
+                        type="text"
+                        id="country"
+                        name="country"
+                        placeholder="Enter your country"
+                        className={`w-full py-3 pl-10 pr-3 border rounded-xl focus:ring-2 focus:ring-blue-200 focus:border-blue-400 ${
+                          errors.country && touched.country 
+                            ? 'border-red-500 focus:ring-red-200 focus:border-red-400' 
+                            : 'border-gray-300'
+                        }`}
+                      />
+                    </div>
+                    <ErrorMessage 
+                      name="country" 
+                      component="div" 
+                      className="text-red-500 text-sm mt-1" 
                     />
                   </div>
-                </div>
-              </div>
 
-              <div className="space-y-2">
-                <label className="block text-gray-700 text-sm font-medium" htmlFor="country">
-                  Country
-                </label>
-                <div className="relative">
-                  <Globe size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
-                  <input
-                    type="text"
-                    id="country"
-                    placeholder="Enter your country"
-                    value={country}
-                    onChange={(e) => setCountry(e.target.value)}
-                    className="w-full py-3 pl-10 pr-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
-                    required
-                  />
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl transition-colors font-semibold"
-              >
-                <span>Continue to Payment</span>
-                <ArrowRight size={18} />
-              </button>
-            </form>
+                  <button
+                    type="submit"
+                    className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl transition-colors font-semibold"
+                  >
+                    <span>Continue to Payment</span>
+                    <ArrowRight size={18} />
+                  </button>
+                </Form>
+              )}
+            </Formik>
           </div>
           
           <div className="md:w-2/5 bg-white p-6 rounded-xl shadow-md h-fit">

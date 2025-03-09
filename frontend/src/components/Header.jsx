@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { ShoppingCart, User, Menu, X, ChevronDown } from "lucide-react";
+import { ShoppingCart, User, Menu, X, ChevronDown, Package } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
-
 
 import { logout } from "../slices/authSlice";
 import { useLogoutMutation } from "../slices/userApiSlice";
@@ -104,6 +102,16 @@ const Header = () => {
                         onClick={() => setIsUserDropdownOpen(false)}
                       >
                         Profile
+                      </Link>
+                      <Link
+                        to="/myorders"
+                        className="block px-4 py-2 hover:bg-gray-100"
+                        onClick={() => setIsUserDropdownOpen(false)}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <Package className="w-4 h-4" />
+                          <span>My Orders</span>
+                        </div>
                       </Link>
                       <button
                         onClick={() => {
@@ -225,6 +233,16 @@ const Header = () => {
                         onClick={closeMenu}
                       >
                         Profile
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/myorders"
+                        className="text-xl font-medium hover:text-gray-300 transition-colors flex items-center space-x-2"
+                        onClick={closeMenu}
+                      >
+                        <Package className="w-5 h-5" />
+                        <span>My Orders</span>
                       </Link>
                     </li>
                     <li>
