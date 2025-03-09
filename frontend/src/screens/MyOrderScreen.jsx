@@ -4,8 +4,6 @@ import { useGetMyOrdersQuery } from '../slices/ordersApiSlice';
 import {
   Clock,
   AlertCircle,
-  FileText,
-  ChevronRight,
   ShoppingBag
 } from 'lucide-react';
 
@@ -32,21 +30,7 @@ const MyOrderScreen = () => {
         {/* Page Header */}
         <div className="mb-8">
           <div className="flex flex-col space-y-2">
-            <nav className="flex" aria-label="Breadcrumb">
-              <ol className="inline-flex items-center space-x-1 text-sm">
-                <li className="inline-flex items-center">
-                  <Link to="/" className="text-gray-500 hover:text-gray-700">
-                    Dashboard
-                  </Link>
-                </li>
-                <li>
-                  <div className="flex items-center">
-                    <ChevronRight className="h-4 w-4 text-gray-400" />
-                    <span className="ml-1 text-gray-700 font-medium">Order History</span>
-                  </div>
-                </li>
-              </ol>
-            </nav>
+          
             <h1 className="text-2xl font-semibold text-gray-900">
               Order History
             </h1>

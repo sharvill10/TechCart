@@ -1,5 +1,5 @@
-import asyncHandler from '../middleware/asyncHandler.js';
-import Product from '../models/productModel.js';
+import asyncHandler from "../middleware/asyncHandler.js";
+import Product from "../models/productModel.js";
 
 // @desc    Fetch all products
 // @route   GET /api/products
@@ -13,12 +13,9 @@ export const getProducts = asyncHandler(async (req, res) => {
 // @route   GET /api/products/:id
 // @access  Public
 export const getProductById = asyncHandler(async (req, res) => {
-  
-  
   const { id } = req.params;
   const product = await Product.findById(id);
 
-  console.log(id , product, ';;;;;;;;;;;;;;;;;;');
   if (!product) {
     return res.status(404).json({ message: "Product not found" });
   }
@@ -31,15 +28,15 @@ export const getProductById = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 export const createProduct = asyncHandler(async (req, res) => {
   const product = new Product({
-    name: 'Sample name',
+    name: "Sample name",
     price: 0,
     user: req.user._id,
-    image: '/images/sample.jpg',
-    brand: 'Sample brand',
-    category: 'Sample category',
+    image: "/images/sample.jpg",
+    brand: "Sample brand",
+    category: "Sample category",
     countInStock: 0,
     numReviews: 0,
-    description: 'Sample description',
+    description: "Sample description",
   });
 
   const createdProduct = await product.save();
@@ -51,9 +48,8 @@ export const createProduct = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 export const updateProduct = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { name, price, description, image, brand, category, countInStock } = req.body;
-  console.log(req.body, 'lllllllllllllll');
-  
+  const { name, price, description, image, brand, category, countInStock } =
+    req.body;
 
   const product = await Product.findById(id);
 
@@ -85,7 +81,7 @@ export const deleteProduct = asyncHandler(async (req, res) => {
   }
 
   await Product.deleteOne({ _id: id });
-  res.json({ message: 'Product removed' });
+  res.json({ message: "Product removed" });
 });
 
 // @desc    Create new review
@@ -122,7 +118,7 @@ export const createProductReview = asyncHandler(async (req, res) => {
     product.reviews.length;
 
   await product.save();
-  res.status(201).json({ message: 'Review added' });
+  res.status(201).json({ message: "Review added" });
 });
 
 // @desc    Get top rated products

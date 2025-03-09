@@ -1,24 +1,22 @@
-import { Link, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import { Link, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import {
   useDeliverOrderMutation,
   useGetOrderDetailsQuery,
   usePayOrderMutation,
-} from '../slices/ordersApiSlice';
-import { 
-  ChevronLeft, 
-  CheckCircle, 
-  XCircle, 
-  AlertTriangle, 
-  Truck, 
+} from "../slices/ordersApiSlice";
+import {
+  CheckCircle,
+  XCircle,
+  AlertTriangle,
+  Truck,
   CreditCard,
-
   User,
   Mail,
   MapPin,
-  ArrowLeft
-} from 'lucide-react';
+  ArrowLeft,
+} from "lucide-react";
 
 // Professional Loader component
 const Loader = () => (
@@ -31,22 +29,24 @@ const Loader = () => (
 const StatusBadge = ({ type, children }) => {
   const getTypeClasses = () => {
     switch (type) {
-      case 'success':
-        return 'bg-green-100 text-green-800 border-green-200';
-      case 'danger':
-        return 'bg-red-100 text-red-800 border-red-200';
-      case 'warning':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case "success":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "danger":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "warning":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
       default:
-        return 'bg-blue-100 text-blue-800 border-blue-200';
+        return "bg-blue-100 text-blue-800 border-blue-200";
     }
   };
 
   return (
-    <div className={`px-3 py-2 text-sm rounded-md border ${getTypeClasses()} inline-flex items-center`}>
-      {type === 'success' && <CheckCircle size={16} className="mr-2" />}
-      {type === 'danger' && <XCircle size={16} className="mr-2" />}
-      {type === 'warning' && <AlertTriangle size={16} className="mr-2" />}
+    <div
+      className={`px-3 py-2 text-sm rounded-md border ${getTypeClasses()} inline-flex items-center`}
+    >
+      {type === "success" && <CheckCircle size={16} className="mr-2" />}
+      {type === "danger" && <XCircle size={16} className="mr-2" />}
+      {type === "warning" && <AlertTriangle size={16} className="mr-2" />}
       {children}
     </div>
   );
@@ -54,34 +54,41 @@ const StatusBadge = ({ type, children }) => {
 
 const OrderScreen = () => {
   const { id: orderId } = useParams();
-  
+
   const {
     data: order,
     refetch,
     isLoading,
     error,
   } = useGetOrderDetailsQuery(orderId);
-  
+
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
-  
-  const [deliverOrder, { isLoading: loadingDeliver }] = useDeliverOrderMutation();
-  
+
+  const [deliverOrder, { isLoading: loadingDeliver }] =
+    useDeliverOrderMutation();
+
   const { userInfo } = useSelector((state) => state.auth);
 
   // Format currency values
   const formatCurrency = (value) => {
-    return Number(value).toLocaleString('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2
+    return Number(value).toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2,
     });
   };
 
   // Format date values
   const formatDate = (dateString) => {
-    if (!dateString) return '';
-    const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-    return new Date(dateString).toLocaleDateString('en-US', options);
+    if (!dateString) return "";
+    const options = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return new Date(dateString).toLocaleDateString("en-US", options);
   };
 
   // Payment handler
@@ -89,9 +96,11 @@ const OrderScreen = () => {
     try {
       await payOrder({ orderId });
       refetch();
-      toast.success('Payment processed successfully');
+      toast.success("Payment processed successfully");
     } catch (err) {
-      toast.error(err?.data?.message || err.error || 'Payment processing failed');
+      toast.error(
+        err?.data?.message || err.error || "Payment processing failed"
+      );
     }
   }
 
@@ -100,9 +109,11 @@ const OrderScreen = () => {
     try {
       await deliverOrder(orderId);
       refetch();
-      toast.success('Order marked as delivered');
+      toast.success("Order marked as delivered");
     } catch (err) {
-      toast.error(err?.data?.message || err.error || 'Failed to update delivery status');
+      toast.error(
+        err?.data?.message || err.error || "Failed to update delivery status"
+      );
     }
   };
 
@@ -129,7 +140,11 @@ const OrderScreen = () => {
                   <AlertTriangle className="h-5 w-5 text-red-400" />
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm font-medium">{error?.data?.message || error.error || "An error occurred loading the order details."}</p>
+                  <p className="text-sm font-medium">
+                    {error?.data?.message ||
+                      error.error ||
+                      "An error occurred loading the order details."}
+                  </p>
                 </div>
               </div>
             </div>
@@ -145,34 +160,14 @@ const OrderScreen = () => {
         {/* Page Header */}
         <div className="mb-6">
           <div className="flex flex-col space-y-2">
-            <nav className="flex" aria-label="Breadcrumb">
-              <ol className="inline-flex items-center space-x-1 text-sm">
-                <li className="inline-flex items-center">
-                  <Link to="/" className="text-gray-500 hover:text-gray-700">
-                    Dashboard
-                  </Link>
-                </li>
-                <li>
-                  <div className="flex items-center">
-                    <ChevronLeft className="h-4 w-4 text-gray-400" />
-                    <Link to="/myorders" className="ml-1 text-gray-500 hover:text-gray-700">
-                      Order History
-                    </Link>
-                  </div>
-                </li>
-                <li>
-                  <div className="flex items-center">
-                    <ChevronLeft className="h-4 w-4 text-gray-400" />
-                    <span className="ml-1 text-gray-700 font-medium">Order Details</span>
-                  </div>
-                </li>
-              </ol>
-            </nav>
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-semibold text-gray-900">
                 Order #{orderId.substring(orderId.length - 8)}
               </h1>
-              <Link to="/profile" className="inline-flex items-center text-blue-600 hover:text-blue-800">
+              <Link
+                to="/profile"
+                className="inline-flex items-center text-blue-600 hover:text-blue-800"
+              >
                 <ArrowLeft size={16} className="mr-1" />
                 Back to Orders
               </Link>
@@ -189,14 +184,18 @@ const OrderScreen = () => {
             {/* Order Status Overview */}
             <div className="bg-white shadow rounded-lg overflow-hidden border border-gray-200">
               <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-                <h2 className="text-lg font-medium text-gray-900">Order Status</h2>
+                <h2 className="text-lg font-medium text-gray-900">
+                  Order Status
+                </h2>
               </div>
               <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <div className="flex items-start mb-4">
                     <CreditCard className="h-6 w-6 text-gray-400 mr-3 mt-0.5" />
                     <div>
-                      <h3 className="text-sm font-medium text-gray-900 mb-1">Payment Status</h3>
+                      <h3 className="text-sm font-medium text-gray-900 mb-1">
+                        Payment Status
+                      </h3>
                       {order.isPaid ? (
                         <div className="space-y-1">
                           <StatusBadge type="success">Paid</StatusBadge>
@@ -205,7 +204,9 @@ const OrderScreen = () => {
                           </p>
                         </div>
                       ) : (
-                        <StatusBadge type="danger">Awaiting Payment</StatusBadge>
+                        <StatusBadge type="danger">
+                          Awaiting Payment
+                        </StatusBadge>
                       )}
                     </div>
                   </div>
@@ -214,7 +215,9 @@ const OrderScreen = () => {
                   <div className="flex items-start">
                     <Truck className="h-6 w-6 text-gray-400 mr-3 mt-0.5" />
                     <div>
-                      <h3 className="text-sm font-medium text-gray-900 mb-1">Delivery Status</h3>
+                      <h3 className="text-sm font-medium text-gray-900 mb-1">
+                        Delivery Status
+                      </h3>
                       {order.isDelivered ? (
                         <div className="space-y-1">
                           <StatusBadge type="success">Delivered</StatusBadge>
@@ -223,7 +226,9 @@ const OrderScreen = () => {
                           </p>
                         </div>
                       ) : (
-                        <StatusBadge type="warning">Pending Delivery</StatusBadge>
+                        <StatusBadge type="warning">
+                          Pending Delivery
+                        </StatusBadge>
                       )}
                     </div>
                   </div>
@@ -234,18 +239,27 @@ const OrderScreen = () => {
             {/* Customer Information */}
             <div className="bg-white shadow rounded-lg overflow-hidden border border-gray-200">
               <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-                <h2 className="text-lg font-medium text-gray-900">Customer Information</h2>
+                <h2 className="text-lg font-medium text-gray-900">
+                  Customer Information
+                </h2>
               </div>
               <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <div className="flex items-start">
                     <User className="h-5 w-5 text-gray-400 mr-3 mt-0.5" />
                     <div>
-                      <h3 className="text-sm font-medium text-gray-500 mb-1">Customer</h3>
-                      <p className="font-medium text-gray-900">{order.user.name}</p>
+                      <h3 className="text-sm font-medium text-gray-500 mb-1">
+                        Customer
+                      </h3>
+                      <p className="font-medium text-gray-900">
+                        {order.user.name}
+                      </p>
                       <div className="flex items-center mt-1 text-sm text-gray-600">
                         <Mail className="h-4 w-4 mr-1" />
-                        <a href={`mailto:${order.user.email}`} className="text-blue-600 hover:text-blue-800">
+                        <a
+                          href={`mailto:${order.user.email}`}
+                          className="text-blue-600 hover:text-blue-800"
+                        >
                           {order.user.email}
                         </a>
                       </div>
@@ -256,12 +270,19 @@ const OrderScreen = () => {
                   <div className="flex items-start">
                     <MapPin className="h-5 w-5 text-gray-400 mr-3 mt-0.5" />
                     <div>
-                      <h3 className="text-sm font-medium text-gray-500 mb-1">Shipping Address</h3>
-                      <p className="text-gray-900">{order.shippingAddress.address}</p>
+                      <h3 className="text-sm font-medium text-gray-500 mb-1">
+                        Shipping Address
+                      </h3>
                       <p className="text-gray-900">
-                        {order.shippingAddress.city}, {order.shippingAddress.postalCode}
+                        {order.shippingAddress.address}
                       </p>
-                      <p className="text-gray-900">{order.shippingAddress.country}</p>
+                      <p className="text-gray-900">
+                        {order.shippingAddress.city},{" "}
+                        {order.shippingAddress.postalCode}
+                      </p>
+                      <p className="text-gray-900">
+                        {order.shippingAddress.country}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -271,14 +292,18 @@ const OrderScreen = () => {
             {/* Order Items */}
             <div className="bg-white shadow rounded-lg overflow-hidden border border-gray-200">
               <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-                <h2 className="text-lg font-medium text-gray-900">Order Items</h2>
+                <h2 className="text-lg font-medium text-gray-900">
+                  Order Items
+                </h2>
               </div>
               <div className="p-6">
                 {order.orderItems.length === 0 ? (
                   <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 p-4 rounded-md">
                     <div className="flex">
                       <AlertTriangle className="h-5 w-5 text-yellow-400" />
-                      <p className="ml-3 text-sm">This order does not contain any items.</p>
+                      <p className="ml-3 text-sm">
+                        This order does not contain any items.
+                      </p>
                     </div>
                   </div>
                 ) : (
@@ -297,15 +322,15 @@ const OrderScreen = () => {
                         {order.orderItems.map((item, index) => (
                           <tr key={index} className="hover:bg-gray-50">
                             <td className="px-4 py-4">
-                              <img 
-                                src={item.image} 
-                                alt={item.name} 
-                                className="h-16 w-16 object-cover rounded border border-gray-200" 
+                              <img
+                                src={item.image}
+                                alt={item.name}
+                                className="h-16 w-16 object-cover rounded border border-gray-200"
                               />
                             </td>
                             <td className="px-4 py-4">
-                              <Link 
-                                to={`/product/${item.product}`} 
+                              <Link
+                                to={`/product/${item.product}`}
                                 className="text-blue-600 hover:text-blue-800 font-medium"
                               >
                                 {item.name}
@@ -335,26 +360,36 @@ const OrderScreen = () => {
             {/* Order Summary */}
             <div className="bg-white shadow rounded-lg overflow-hidden border border-gray-200">
               <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-                <h2 className="text-lg font-medium text-gray-900">Order Summary</h2>
+                <h2 className="text-lg font-medium text-gray-900">
+                  Order Summary
+                </h2>
               </div>
               <div className="p-6">
                 <dl className="space-y-3">
                   <div className="flex justify-between py-1 text-sm">
                     <dt className="text-gray-600">Subtotal</dt>
-                    <dd className="text-gray-900 font-medium">{formatCurrency(order.itemsPrice)}</dd>
+                    <dd className="text-gray-900 font-medium">
+                      {formatCurrency(order.itemsPrice)}
+                    </dd>
                   </div>
                   <div className="flex justify-between py-1 text-sm">
                     <dt className="text-gray-600">Shipping</dt>
-                    <dd className="text-gray-900 font-medium">{formatCurrency(order.shippingPrice)}</dd>
+                    <dd className="text-gray-900 font-medium">
+                      {formatCurrency(order.shippingPrice)}
+                    </dd>
                   </div>
                   <div className="flex justify-between py-1 text-sm">
                     <dt className="text-gray-600">Tax</dt>
-                    <dd className="text-gray-900 font-medium">{formatCurrency(order.taxPrice)}</dd>
+                    <dd className="text-gray-900 font-medium">
+                      {formatCurrency(order.taxPrice)}
+                    </dd>
                   </div>
                   <div className="border-t border-gray-200 pt-3 mt-3">
                     <div className="flex justify-between text-base">
                       <dt className="font-medium text-gray-900">Total</dt>
-                      <dd className="font-bold text-gray-900">{formatCurrency(order.totalPrice)}</dd>
+                      <dd className="font-bold text-gray-900">
+                        {formatCurrency(order.totalPrice)}
+                      </dd>
                     </div>
                   </div>
                 </dl>
@@ -363,7 +398,9 @@ const OrderScreen = () => {
                 <div className="mt-6 pt-6 border-t border-gray-200">
                   <div className="flex items-center mb-4">
                     <CreditCard className="h-5 w-5 text-gray-400 mr-2" />
-                    <h3 className="text-sm font-medium text-gray-900">Payment Method</h3>
+                    <h3 className="text-sm font-medium text-gray-900">
+                      Payment Method
+                    </h3>
                   </div>
                   <p className="text-gray-600 mb-6">{order.paymentMethod}</p>
 
@@ -384,20 +421,23 @@ const OrderScreen = () => {
                   )}
 
                   {/* Admin Actions */}
-                  {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
-                    <div className="mt-4">
-                      {loadingDeliver ? (
-                        <Loader />
-                      ) : (
-                        <button
-                          onClick={deliverHandler}
-                          className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                        >
-                          Mark as Delivered
-                        </button>
-                      )}
-                    </div>
-                  )}
+                  {userInfo &&
+                    userInfo.isAdmin &&
+                    order.isPaid &&
+                    !order.isDelivered && (
+                      <div className="mt-4">
+                        {loadingDeliver ? (
+                          <Loader />
+                        ) : (
+                          <button
+                            onClick={deliverHandler}
+                            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                          >
+                            Mark as Delivered
+                          </button>
+                        )}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
@@ -405,11 +445,14 @@ const OrderScreen = () => {
             {/* Help & Support Card */}
             <div className="bg-white shadow rounded-lg overflow-hidden border border-gray-200">
               <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-                <h2 className="text-lg font-medium text-gray-900">Need Help?</h2>
+                <h2 className="text-lg font-medium text-gray-900">
+                  Need Help?
+                </h2>
               </div>
               <div className="p-6">
                 <p className="text-sm text-gray-600 mb-4">
-                  If you have any questions about this order, please contact our customer support team.
+                  If you have any questions about this order, please contact our
+                  customer support team.
                 </p>
                 <button className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                   Contact Support
