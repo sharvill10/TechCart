@@ -7,9 +7,9 @@ const App = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-
-      <Outlet />
-
+      <main className="flex-grow mt-16 md:mt-20"> 
+        <Outlet />
+      </main>
       <Footer />
     </div>
   );

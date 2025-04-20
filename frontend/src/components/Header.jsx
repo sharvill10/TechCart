@@ -38,7 +38,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-[#111827] text-white shadow-lg relative z-50">
+    <header className="bg-[#111827] text-white shadow-lg fixed top-0 left-0 right-0 z-50">
       <div className="container mx-auto px-4 py-4 max-w-screen-xl">
         <div className="flex items-center justify-between">
           {/* Logo - Keeping original */}
@@ -52,7 +52,7 @@ const Header = () => {
               alt="Tech Cart Logo"
               className="w-8 h-8 md:w-10 md:h-10 object-contain"
             />
-            <h1 className="text-lg md:text-xl font-bold">Tech Cart</h1>
+            <h1 className="text-lg md:text-xl font-semibold">Tech Cart</h1>
           </Link>
 
           {/* Desktop Navigation */}
@@ -98,7 +98,7 @@ const Header = () => {
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 text-gray-800 z-50">
                       <Link
                         to="/profile"
-                        className="block px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
+                        className="px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
                         onClick={() => setIsUserDropdownOpen(false)}
                       >
                         <UserCircle className="w-4 h-4 text-gray-700" />
@@ -106,7 +106,7 @@ const Header = () => {
                       </Link>
                       <Link
                         to="/myorders"
-                        className="block px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
+                        className="px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
                         onClick={() => setIsUserDropdownOpen(false)}
                       >
                         <Package className="w-4 h-4 text-gray-700" />
@@ -117,7 +117,7 @@ const Header = () => {
                           setIsUserDropdownOpen(false);
                           logoutHandler();
                         }}
-                        className="block w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
+                        className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
@@ -158,7 +158,7 @@ const Header = () => {
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 text-gray-800 z-50">
                       <Link
                         to="/admin/productlist"
-                        className="block px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
+                        className="px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
                         onClick={() => setIsAdminDropdownOpen(false)}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -169,7 +169,7 @@ const Header = () => {
                       </Link>
                       <Link
                         to="/admin/orderlist"
-                        className="block px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
+                        className="px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
                         onClick={() => setIsAdminDropdownOpen(false)}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -181,7 +181,7 @@ const Header = () => {
                       </Link>
                       <Link
                         to="/admin/userlist"
-                        className="block px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
+                        className="px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
                         onClick={() => setIsAdminDropdownOpen(false)}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -298,7 +298,7 @@ const Header = () => {
                 {/* Admin Links - Mobile */}
                 {userInfo && userInfo.isAdmin && (
                   <>
-                    <li className="text-xl font-bold flex items-center space-x-3">
+                    <li className="text-xl font-semibold flex items-center space-x-3">
                       <Shield className="w-6 h-6" />
                       <span>Admin</span>
                     </li>

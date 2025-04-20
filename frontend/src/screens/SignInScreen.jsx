@@ -58,6 +58,12 @@ const SignInScreen = () => {
     }
   };
 
+  // // Handle OAuth authentication
+  // const handleOAuthLogin = (provider) => {
+  //   // Redirect to backend OAuth endpoint
+  //   window.location.href = `/api/users/oauth/${provider}?redirect=${redirect}`;
+  // };
+
   return (
     <div className="min-h-screen bg-white py-12">
       <div className="max-w-lg mx-auto px-4">
@@ -66,7 +72,7 @@ const SignInScreen = () => {
             <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-blue-50 mb-4">
               <Coffee size={28} className="text-blue-600" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-800">Welcome Back</h1>
+            <h1 className="text-2xl font-semibold text-gray-800">Welcome Back</h1>
             <p className="text-gray-600 mt-1">
               Sign in to your Tech Cart account
             </p>
@@ -204,7 +210,10 @@ const SignInScreen = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <button className="flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors">
+              <button 
+                // onClick={() => handleOAuthLogin('google')}
+                className="flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
+              >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path
                     d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -227,7 +236,10 @@ const SignInScreen = () => {
                   Google
                 </span>
               </button>
-              <button className="flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors">
+              <button 
+                // onClick={() => handleOAuthLogin('facebook')}
+                className="flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
+              >
                 <svg
                   className="w-5 h-5 text-blue-600 fill-current"
                   viewBox="0 0 24 24"

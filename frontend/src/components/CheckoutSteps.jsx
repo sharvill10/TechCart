@@ -4,8 +4,9 @@ import { Check, Truck, CreditCard, ShoppingBag } from "lucide-react";
 
 const CheckoutSteps = ({ step1, step2, step3 }) => {
   return (
-    <div className="my-6 relative">
-      <div className="absolute top-8 left-0 w-full h-0.5 bg-gray-200">
+    <div className="mb-2 md:mb-3 relative">
+      {/* Progress bar */}
+      <div className="absolute top-5 md:top-6 left-0 w-full h-0.5 bg-gray-200">
         <div
           className={`absolute left-0 w-1/2 h-full ${
             step2 || step3 ? "bg-green-500" : "bg-gray-200"
@@ -25,7 +26,7 @@ const CheckoutSteps = ({ step1, step2, step3 }) => {
           link="/shipping"
           active={step1}
           completed={step2 || step3}
-          icon={<Truck size={24} />}
+          icon={<Truck />}
         />
 
         <Step
@@ -33,7 +34,7 @@ const CheckoutSteps = ({ step1, step2, step3 }) => {
           link="/payment"
           active={step2}
           completed={step3}
-          icon={<CreditCard size={24} />}
+          icon={<CreditCard />}
         />
 
         <Step
@@ -41,7 +42,7 @@ const CheckoutSteps = ({ step1, step2, step3 }) => {
           link="/placeorder"
           active={step3}
           completed={false}
-          icon={<ShoppingBag size={24} />}
+          icon={<ShoppingBag />}
         />
       </div>
     </div>
@@ -52,7 +53,7 @@ const Step = ({ title, link, active, completed, icon }) => {
   const content = (
     <div className="flex flex-col items-center">
       <div
-        className={`w-16 h-16 rounded-full flex items-center justify-center ${
+        className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center ${
           completed
             ? "bg-green-500 text-white"
             : active
@@ -60,10 +61,16 @@ const Step = ({ title, link, active, completed, icon }) => {
             : "bg-gray-200 text-gray-500"
         }`}
       >
-        {completed ? <Check size={24} /> : icon}
+        {completed ? (
+          <Check className="w-5 h-5 md:w-6 md:h-6" />
+        ) : (
+          React.cloneElement(icon, {
+            className: "w-5 h-5 md:w-6 md:h-6"
+          })
+        )}
       </div>
       <span
-        className={`mt-2 text-sm font-medium ${
+        className={`mt-1 text-xs md:text-sm font-medium ${
           completed
             ? "text-green-600"
             : active
