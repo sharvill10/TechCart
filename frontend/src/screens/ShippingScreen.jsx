@@ -45,7 +45,7 @@ const ShippingScreen = () => {
           <div className="md:w-3/5 bg-white p-6 rounded-xl shadow-md">
             <div className="flex items-center gap-3 mb-6">
               <Truck className="w-6 h-6 text-blue-600" />
-              <h1 className="text-2xl font-bold text-gray-800">Shipping Details</h1>
+              <h1 className="text-2xl font-semibold text-gray-800">Shipping Details</h1>
             </div>
             
             <Formik
@@ -170,7 +170,7 @@ const ShippingScreen = () => {
           </div>
           
           <div className="md:w-2/5 bg-white p-6 rounded-xl shadow-md h-fit">
-            <h2 className="text-xl font-bold text-gray-800 mb-6">Shipping Information</h2>
+            <h2 className="text-xl font-semibold text-gray-800 mb-6">Shipping Information</h2>
             <div className="space-y-4">
               <p className="text-gray-600">Please provide your shipping details to ensure your order is delivered to the correct location.</p>
               

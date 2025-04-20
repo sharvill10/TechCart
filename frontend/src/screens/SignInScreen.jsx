@@ -36,13 +36,11 @@ const SignInScreen = () => {
     }
   }, [navigate, redirect, userInfo]);
 
-  // Validation schema using Yup
   const validationSchema = Yup.object({
     email: Yup.string()
       .email("Invalid email address")
       .required("Email is required"),
-    password: Yup.string()
-      .required("Password is required")
+    password: Yup.string().required("Password is required"),
   });
 
   const submitHandler = async (values, { setSubmitting, setStatus }) => {
@@ -64,7 +62,6 @@ const SignInScreen = () => {
     <div className="min-h-screen bg-white py-12">
       <div className="max-w-lg mx-auto px-4">
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-          {/* Logo/Header area */}
           <div className="px-8 pt-8 pb-4 text-center">
             <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-blue-50 mb-4">
               <Coffee size={28} className="text-blue-600" />
@@ -195,7 +192,6 @@ const SignInScreen = () => {
               )}
             </Formik>
 
-            {/* Sign-in methods */}
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200"></div>
@@ -207,7 +203,6 @@ const SignInScreen = () => {
               </div>
             </div>
 
-            {/* Social login buttons */}
             <div className="grid grid-cols-2 gap-4">
               <button className="flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors">
                 <svg className="w-5 h-5" viewBox="0 0 24 24">

@@ -17,15 +17,14 @@ import {
   MapPin,
   ArrowLeft,
 } from "lucide-react";
+import LoadingComponent from "../components/LoadingComponent";
 
-// Professional Loader component
 const Loader = () => (
   <div className="flex justify-center items-center py-8">
     <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600"></div>
   </div>
 );
 
-// Professional Status component
 const StatusBadge = ({ type, children }) => {
   const getTypeClasses = () => {
     switch (type) {
@@ -69,7 +68,6 @@ const OrderScreen = () => {
 
   const { userInfo } = useSelector((state) => state.auth);
 
-  // Format currency values
   const formatCurrency = (value) => {
     return Number(value).toLocaleString("en-US", {
       style: "currency",
@@ -78,7 +76,6 @@ const OrderScreen = () => {
     });
   };
 
-  // Format date values
   const formatDate = (dateString) => {
     if (!dateString) return "";
     const options = {
@@ -91,7 +88,6 @@ const OrderScreen = () => {
     return new Date(dateString).toLocaleDateString("en-US", options);
   };
 
-  // Payment handler
   async function handlePayment() {
     try {
       await payOrder({ orderId });
@@ -104,7 +100,6 @@ const OrderScreen = () => {
     }
   }
 
-  // Deliver handler
   const deliverHandler = async () => {
     try {
       await deliverOrder(orderId);
@@ -118,15 +113,7 @@ const OrderScreen = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white shadow rounded-lg p-8">
-            <Loader />
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   if (error) {
@@ -157,7 +144,6 @@ const OrderScreen = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Page Header */}
         <div className="mb-6">
           <div className="flex flex-col space-y-2">
             <div className="flex items-center justify-between">
@@ -179,9 +165,7 @@ const OrderScreen = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Main Order Details */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Order Status Overview */}
             <div className="bg-white shadow rounded-lg overflow-hidden border border-gray-200">
               <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
                 <h2 className="text-lg font-medium text-gray-900">
@@ -235,8 +219,6 @@ const OrderScreen = () => {
                 </div>
               </div>
             </div>
-
-            {/* Customer Information */}
             <div className="bg-white shadow rounded-lg overflow-hidden border border-gray-200">
               <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
                 <h2 className="text-lg font-medium text-gray-900">
@@ -289,7 +271,6 @@ const OrderScreen = () => {
               </div>
             </div>
 
-            {/* Order Items */}
             <div className="bg-white shadow rounded-lg overflow-hidden border border-gray-200">
               <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
                 <h2 className="text-lg font-medium text-gray-900">
@@ -355,9 +336,7 @@ const OrderScreen = () => {
             </div>
           </div>
 
-          {/* Order Summary Sidebar */}
           <div className="space-y-6">
-            {/* Order Summary */}
             <div className="bg-white shadow rounded-lg overflow-hidden border border-gray-200">
               <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
                 <h2 className="text-lg font-medium text-gray-900">
@@ -394,7 +373,6 @@ const OrderScreen = () => {
                   </div>
                 </dl>
 
-                {/* Payment Method */}
                 <div className="mt-6 pt-6 border-t border-gray-200">
                   <div className="flex items-center mb-4">
                     <CreditCard className="h-5 w-5 text-gray-400 mr-2" />
@@ -404,7 +382,6 @@ const OrderScreen = () => {
                   </div>
                   <p className="text-gray-600 mb-6">{order.paymentMethod}</p>
 
-                  {/* Payment Actions */}
                   {!order.isPaid && (
                     <div>
                       {loadingPay ? (
@@ -420,7 +397,6 @@ const OrderScreen = () => {
                     </div>
                   )}
 
-                  {/* Admin Actions */}
                   {userInfo &&
                     userInfo.isAdmin &&
                     order.isPaid &&
@@ -442,7 +418,6 @@ const OrderScreen = () => {
               </div>
             </div>
 
-            {/* Help & Support Card */}
             <div className="bg-white shadow rounded-lg overflow-hidden border border-gray-200">
               <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
                 <h2 className="text-lg font-medium text-gray-900">

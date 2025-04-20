@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { setCredentials } from "../slices/authSlice";
 import { useProfileMutation } from "../slices/userApiSlice";
+import LoadingComponent from "../components/LoadingComponent";
 
 const ProfileScreen = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -37,14 +38,7 @@ const ProfileScreen = () => {
   // Handle case when userInfo is null or not loaded yet
   if (!userInfo) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8">
-          <div className="flex items-center justify-center space-x-2">
-            <Clock className="w-6 h-6 text-blue-600 animate-pulse" />
-            <p className="text-center text-blue-800 font-medium">Loading profile information...</p>
-          </div>
-        </div>
-      </div>
+  <LoadingComponent/>
     );
   }
 
@@ -159,7 +153,7 @@ const ProfileScreen = () => {
               
               {/* Name and Email */}
               <div className="flex-1">
-                <h2 className="text-2xl font-bold text-gray-800">{userInfo.name}</h2>
+                <h2 className="text-2xl font-semibold text-gray-800">{userInfo.name}</h2>
                 <div className="flex items-center space-x-2 text-gray-500 mt-1">
                   <Mail size={16} />
                   <span>{userInfo.email}</span>

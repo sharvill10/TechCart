@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { X, Check, Search, ChevronDown, ChevronUp, Loader as LoaderIcon, Filter } from 'lucide-react';
-import { useGetOrdersQuery } from '../../slices/ordersApiSlice';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  X,
+  Check,
+  Search,
+  ChevronDown,
+  ChevronUp,
+  Loader as LoaderIcon,
+  Filter,
+} from "lucide-react";
+import { useGetOrdersQuery } from "../../slices/ordersApiSlice";
 
-// Loader component
 const Loader = () => (
   <div className="flex justify-center items-center py-12">
     <LoaderIcon className="animate-spin h-10 w-10 text-blue-600" />
@@ -11,130 +18,145 @@ const Loader = () => (
   </div>
 );
 
-// Message component
 const Message = ({ variant, children }) => {
   const getVariantClasses = () => {
     switch (variant) {
-      case 'danger':
-        return 'bg-red-50 text-red-700 border-red-200';
-      case 'success':
-        return 'bg-green-50 text-green-700 border-green-200';
-      case 'info':
-        return 'bg-blue-50 text-blue-700 border-blue-200';
+      case "danger":
+        return "bg-red-50 text-red-700 border-red-200";
+      case "success":
+        return "bg-green-50 text-green-700 border-green-200";
+      case "info":
+        return "bg-blue-50 text-blue-700 border-blue-200";
       default:
-        return 'bg-gray-50 text-gray-700 border-gray-200';
+        return "bg-gray-50 text-gray-700 border-gray-200";
     }
   };
 
   return (
     <div className={`p-5 mb-5 border rounded-lg ${getVariantClasses()}`}>
       <div className="flex items-start">
-        {variant === 'danger' && <X className="h-5 w-5 mr-2 flex-shrink-0" />}
-        {variant === 'success' && <Check className="h-5 w-5 mr-2 flex-shrink-0" />}
+        {variant === "danger" && <X className="h-5 w-5 mr-2 flex-shrink-0" />}
+        {variant === "success" && (
+          <Check className="h-5 w-5 mr-2 flex-shrink-0" />
+        )}
         <div>{children}</div>
       </div>
     </div>
   );
 };
 
-// Status Badge component
 const StatusBadge = ({ isPaid, isDelivered }) => {
   if (isPaid && isDelivered) {
-    return <span className="px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">Completed</span>;
+    return (
+      <span className="px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+        Completed
+      </span>
+    );
   } else if (isPaid) {
-    return <span className="px-3 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">Processing</span>;
+    return (
+      <span className="px-3 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
+        Processing
+      </span>
+    );
   } else {
-    return <span className="px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800">Pending</span>;
+    return (
+      <span className="px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800">
+        Pending
+      </span>
+    );
   }
 };
 
-// Format date
 const formatDate = (dateString) => {
-  const options = { year: 'numeric', month: 'short', day: 'numeric' };
+  const options = { year: "numeric", month: "short", day: "numeric" };
   return new Date(dateString).toLocaleDateString(undefined, options);
 };
 
-// Format currency
 const formatCurrency = (amount) => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
   }).format(amount);
 };
 
 const OrderListScreen = () => {
   const { data: orders, isLoading, error } = useGetOrdersQuery();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortField, setSortField] = useState('createdAt');
-  const [sortDirection, setSortDirection] = useState('desc');
-  const [filter, setFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortField, setSortField] = useState("createdAt");
+  const [sortDirection, setSortDirection] = useState("desc");
+  const [filter, setFilter] = useState("all");
 
   const handleSort = (field) => {
     if (sortField === field) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
       setSortField(field);
-      setSortDirection('asc');
+      setSortDirection("asc");
     }
   };
 
   const getSortIcon = (field) => {
     if (sortField === field) {
-      return sortDirection === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />;
+      return sortDirection === "asc" ? (
+        <ChevronUp className="w-4 h-4" />
+      ) : (
+        <ChevronDown className="w-4 h-4" />
+      );
     }
     return null;
   };
 
-  // Filter and sort orders
-  const filteredOrders = orders ? orders.filter(order => {
-    // Apply status filter
-    if (filter === 'paid' && !order.isPaid) return false;
-    if (filter === 'unpaid' && order.isPaid) return false;
-    if (filter === 'delivered' && !order.isDelivered) return false;
-    if (filter === 'undelivered' && order.isDelivered) return false;
-    
-    // Apply search filter
-    return (
-      order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (order.user && order.user.name.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
-  }).sort((a, b) => {
-    // Apply sorting
-    let fieldA, fieldB;
-    
-    switch (sortField) {
-      case 'createdAt':
-        fieldA = new Date(a.createdAt);
-        fieldB = new Date(b.createdAt);
-        break;
-      case 'totalPrice':
-        fieldA = a.totalPrice;
-        fieldB = b.totalPrice;
-        break;
-      case 'user':
-        fieldA = a.user ? a.user.name.toLowerCase() : '';
-        fieldB = b.user ? b.user.name.toLowerCase() : '';
-        break;
-      default:
-        fieldA = a[sortField];
-        fieldB = b[sortField];
-    }
-    
-    if (fieldA < fieldB) return sortDirection === 'asc' ? -1 : 1;
-    if (fieldA > fieldB) return sortDirection === 'asc' ? 1 : -1;
-    return 0;
-  }) : [];
+  const filteredOrders = orders
+    ? orders
+        .filter((order) => {
+          if (filter === "paid" && !order.isPaid) return false;
+          if (filter === "unpaid" && order.isPaid) return false;
+          if (filter === "delivered" && !order.isDelivered) return false;
+          if (filter === "undelivered" && order.isDelivered) return false;
+
+          return (
+            order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (order.user &&
+              order.user.name.toLowerCase().includes(searchTerm.toLowerCase()))
+          );
+        })
+        .sort((a, b) => {
+          let fieldA, fieldB;
+
+          switch (sortField) {
+            case "createdAt":
+              fieldA = new Date(a.createdAt);
+              fieldB = new Date(b.createdAt);
+              break;
+            case "totalPrice":
+              fieldA = a.totalPrice;
+              fieldB = b.totalPrice;
+              break;
+            case "user":
+              fieldA = a.user ? a.user.name.toLowerCase() : "";
+              fieldB = b.user ? b.user.name.toLowerCase() : "";
+              break;
+            default:
+              fieldA = a[sortField];
+              fieldB = b[sortField];
+          }
+
+          if (fieldA < fieldB) return sortDirection === "asc" ? -1 : 1;
+          if (fieldA > fieldB) return sortDirection === "asc" ? 1 : -1;
+          return 0;
+        })
+    : [];
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Order Management</h1>
         <p className="text-gray-600 mt-1 md:mt-0">
-          {orders ? `${filteredOrders.length} of ${orders.length} orders` : 'Loading orders...'}
+          {orders
+            ? `${filteredOrders.length} of ${orders.length} orders`
+            : "Loading orders..."}
         </p>
       </div>
-
-      {/* Filters and search */}
       <div className="mb-6 flex flex-col sm:flex-row gap-4">
         <div className="relative flex-grow">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -172,7 +194,9 @@ const OrderListScreen = () => {
         <Loader />
       ) : error ? (
         <Message variant="danger">
-          {error?.data?.message || error.error || 'An error occurred while fetching orders'}
+          {error?.data?.message ||
+            error.error ||
+            "An error occurred while fetching orders"}
         </Message>
       ) : orders && orders.length === 0 ? (
         <Message variant="info">No orders found</Message>
@@ -182,56 +206,69 @@ const OrderListScreen = () => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th 
+                  <th
                     className="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort('_id')}
+                    onClick={() => handleSort("_id")}
                   >
                     <div className="flex items-center">
                       <span>Order ID</span>
-                      {getSortIcon('_id')}
+                      {getSortIcon("_id")}
                     </div>
                   </th>
-                  <th 
+                  <th
                     className="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort('user')}
+                    onClick={() => handleSort("user")}
                   >
                     <div className="flex items-center">
                       <span>Customer</span>
-                      {getSortIcon('user')}
+                      {getSortIcon("user")}
                     </div>
                   </th>
-                  <th 
+                  <th
                     className="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort('createdAt')}
+                    onClick={() => handleSort("createdAt")}
                   >
                     <div className="flex items-center">
                       <span>Date</span>
-                      {getSortIcon('createdAt')}
+                      {getSortIcon("createdAt")}
                     </div>
                   </th>
-                  <th 
+                  <th
                     className="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort('totalPrice')}
+                    onClick={() => handleSort("totalPrice")}
                   >
                     <div className="flex items-center">
                       <span>Amount</span>
-                      {getSortIcon('totalPrice')}
+                      {getSortIcon("totalPrice")}
                     </div>
                   </th>
-                  <th className="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment</th>
-                  <th className="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Delivery</th>
-                  <th className="py-3.5 px-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th className="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Payment
+                  </th>
+                  <th className="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Delivery
+                  </th>
+                  <th className="py-3.5 px-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
                 {filteredOrders.map((order) => (
-                  <tr key={order._id} className="hover:bg-gray-50 transition-colors">
+                  <tr
+                    key={order._id}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
                     <td className="py-4 px-4 text-sm text-gray-900 font-medium">
-                      <span className="block truncate max-w-[120px]">{order._id}</span>
+                      <span className="block truncate max-w-[120px]">
+                        {order._id}
+                      </span>
                     </td>
                     <td className="py-4 px-4 text-sm text-gray-700">
-                      {order.user ? order.user.name : 'Unknown User'}
+                      {order.user ? order.user.name : "Unknown User"}
                     </td>
                     <td className="py-4 px-4 text-sm text-gray-700">
                       {formatDate(order.createdAt)}
@@ -240,13 +277,18 @@ const OrderListScreen = () => {
                       {formatCurrency(order.totalPrice)}
                     </td>
                     <td className="py-4 px-4 text-sm text-gray-700">
-                      <StatusBadge isPaid={order.isPaid} isDelivered={order.isDelivered} />
+                      <StatusBadge
+                        isPaid={order.isPaid}
+                        isDelivered={order.isDelivered}
+                      />
                     </td>
                     <td className="py-4 px-4 text-sm text-gray-700">
                       {order.isPaid ? (
                         <div className="flex items-center">
                           <Check className="h-5 w-5 text-green-500 mr-1.5" />
-                          <span className="text-green-700">{formatDate(order.paidAt)}</span>
+                          <span className="text-green-700">
+                            {formatDate(order.paidAt)}
+                          </span>
                         </div>
                       ) : (
                         <div className="flex items-center">
@@ -259,7 +301,9 @@ const OrderListScreen = () => {
                       {order.isDelivered ? (
                         <div className="flex items-center">
                           <Check className="h-5 w-5 text-green-500 mr-1.5" />
-                          <span className="text-green-700">{formatDate(order.deliveredAt)}</span>
+                          <span className="text-green-700">
+                            {formatDate(order.deliveredAt)}
+                          </span>
                         </div>
                       ) : (
                         <div className="flex items-center">
@@ -281,10 +325,12 @@ const OrderListScreen = () => {
               </tbody>
             </table>
           </div>
-          
+
           {filteredOrders.length === 0 && (
             <div className="text-center py-12 bg-white">
-              <p className="text-gray-500">No orders match your search criteria</p>
+              <p className="text-gray-500">
+                No orders match your search criteria
+              </p>
             </div>
           )}
         </div>
