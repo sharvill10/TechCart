@@ -23,13 +23,15 @@
 <div align="center">
 
 ### 🏠 **Home Page**
-![Home Page](./screenshots/homepage.png)
+<img width="1919" height="913" alt="image" src="https://github.com/user-attachments/assets/c145d1f9-c612-4ba7-afc2-5c6447cc4431" />
+
 
 ### 🛒 **Shopping Experience**
 <table>
 <tr>
-<td><img src="./screenshots/products.png" alt="Product Catalog" width="400"/></td>
-<td><img src="./screenshots/cart.png" alt="Shopping Cart" width="400"/></td>
+<td><img width="1919" height="912" alt="image" src="https://github.com/user-attachments/assets/84178dc0-6fd6-483a-9018-29c864e24350" /></td>
+<td><img width="1919" height="916" alt="image" src="https://github.com/user-attachments/assets/5ae56b41-6aa9-4ffa-b478-b2abd19e271a" />
+</td>
 </tr>
 <tr>
 <td align="center"><strong>Product Catalog</strong></td>
@@ -40,9 +42,11 @@
 ### 💳 **Checkout Process**
 <table>
 <tr>
-<td><img src="./screenshots/checkout.png" alt="Checkout" width="250"/></td>
-<td><img src="./screenshots/payment.png" alt="Payment" width="250"/></td>
-<td><img src="./screenshots/order-confirmation.png" alt="Order Confirmation" width="250"/></td>
+<td><img width="1919" height="908" alt="image" src="https://github.com/user-attachments/assets/d99a5c12-50cc-431b-999f-8133df1908f5" />
+</td>
+<td><img width="1919" height="916" alt="image" src="https://github.com/user-attachments/assets/3c8fa6c4-9703-416a-bc8a-aa875739e1f8" /></td>
+<td><img width="1919" height="908" alt="image" src="https://github.com/user-attachments/assets/d9349cf1-588f-4e01-95e5-4c8312c04701" />
+</td>
 </tr>
 <tr>
 <td align="center"><strong>Checkout</strong></td>
@@ -54,11 +58,14 @@
 ### 👑 **Admin Dashboard**
 <table>
 <tr>
-<td><img src="./screenshots/admin-dashboard.png" alt="Admin Dashboard" width="400"/></td>
-<td><img src="./screenshots/admin-products.png" alt="Product Management" width="400"/></td>
+<td><img width="1919" height="798" alt="image" src="https://github.com/user-attachments/assets/06f996d9-6cfd-47e7-ab15-f106257a769b" />
+</td>
+<td><img width="1919" height="899" alt="image" src="https://github.com/user-attachments/assets/305acd7e-40aa-4367-a1db-ce2c436dca0b" />
+
+</td>
 </tr>
 <tr>
-<td align="center"><strong>Dashboard</strong></td>
+<td align="center"><strong>Order Mangement</strong></td>
 <td align="center"><strong>Product Management</strong></td>
 </tr>
 </table>
@@ -78,6 +85,7 @@
 <td align="center"><strong>Checkout</strong></td>
 </tr>
 </table>
+
 
 </div>
 
@@ -338,7 +346,6 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 **Sharvil Shetty**
 - 🌟 Full-Stack Developer
-- 💼 E-commerce Architecture Specialist
 
 ---
 
