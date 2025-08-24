@@ -64,7 +64,20 @@
 </table>
 
 ### 📱 **Mobile Responsive**
-![Mobile Views](./screenshots/mobile-views.png)
+<table>
+<tr>
+<td><img width="200" height="400" alt="Mobile Home" src="https://github.com/user-attachments/assets/45f276cb-e8c9-4da5-946c-2cbecdd9bf6d" /></td>
+<td><img width="200" height="400" alt="Mobile Products" src="https://github.com/user-attachments/assets/50415478-e8ce-41b3-a4c4-36b132f5a52a" /></td>
+<td><img width="200" height="400" alt="Mobile Cart" src="https://github.com/user-attachments/assets/be368403-6be4-4606-9e49-eed4780eac63" /></td>
+<td><img width="200" height="400" alt="Mobile Checkout" src="https://github.com/user-attachments/assets/82af4f9f-17c6-430f-9a32-ec4d0c943c1f" /></td>
+</tr>
+<tr>
+<td align="center"><strong>Home Screen</strong></td>
+<td align="center"><strong>Product Browse</strong></td>
+<td align="center"><strong>Shopping Cart</strong></td>
+<td align="center"><strong>Checkout</strong></td>
+</tr>
+</table>
 
 </div>
 
