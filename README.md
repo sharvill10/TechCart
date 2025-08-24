@@ -58,17 +58,25 @@
 ### 👑 **Admin Dashboard**
 <table>
 <tr>
-<td><img src="./screenshots/admin-dashboard.png" alt="Admin Dashboard" width="400"/></td>
-<td><img src="./screenshots/admin-products.png" alt="Product Management" width="400"/></td>
+<td><img width="1919" height="798" alt="image" src="https://github.com/user-attachments/assets/06f996d9-6cfd-47e7-ab15-f106257a769b" />
+</td>
+<td><img width="1919" height="899" alt="image" src="https://github.com/user-attachments/assets/305acd7e-40aa-4367-a1db-ce2c436dca0b" />
+
+</td>
 </tr>
 <tr>
-<td align="center"><strong>Dashboard</strong></td>
+<td align="center"><strong>Order Mangement</strong></td>
 <td align="center"><strong>Product Management</strong></td>
 </tr>
 </table>
 
 ### 📱 **Mobile Responsive**
-![Mobile Views](./screenshots/mobile-views.png)
+<img width="357" height="803" alt="image" src="https://github.com/user-attachments/assets/45f276cb-e8c9-4da5-946c-2cbecdd9bf6d" />
+<img width="363" height="802" alt="image" src="https://github.com/user-attachments/assets/50415478-e8ce-41b3-a4c4-36b132f5a52a" />
+<img width="359" height="803" alt="image" src="https://github.com/user-attachments/assets/be368403-6be4-4606-9e49-eed4780eac63" />
+<img width="357" height="801" alt="image" src="https://github.com/user-attachments/assets/82af4f9f-17c6-430f-9a32-ec4d0c943c1f" />
+
+
 
 </div>
 
