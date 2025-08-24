@@ -82,7 +82,7 @@
 <td align="center"><strong>Home Screen</strong></td>
 <td align="center"><strong>Product Browse</strong></td>
 <td align="center"><strong>Shopping Cart</strong></td>
-<td align="center"><strong>Checkout</strong></td>
+<td align="center"><strong>Login</strong></td>
 </tr>
 </table>
 
