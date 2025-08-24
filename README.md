@@ -23,15 +23,13 @@
 <div align="center">
 
 ### 🏠 **Home Page**
-<img width="1919" height="913" alt="image" src="https://github.com/user-attachments/assets/c145d1f9-c612-4ba7-afc2-5c6447cc4431" />
-
+![Home Page](./screenshots/homepage.png)
 
 ### 🛒 **Shopping Experience**
 <table>
 <tr>
-<td><img width="1919" height="912" alt="image" src="https://github.com/user-attachments/assets/84178dc0-6fd6-483a-9018-29c864e24350" /></td>
-<td><img width="1919" height="916" alt="image" src="https://github.com/user-attachments/assets/5ae56b41-6aa9-4ffa-b478-b2abd19e271a" />
-</td>
+<td><img src="./screenshots/products.png" alt="Product Catalog" width="400"/></td>
+<td><img src="./screenshots/cart.png" alt="Shopping Cart" width="400"/></td>
 </tr>
 <tr>
 <td align="center"><strong>Product Catalog</strong></td>
@@ -42,11 +40,9 @@
 ### 💳 **Checkout Process**
 <table>
 <tr>
-<td><img width="1919" height="908" alt="image" src="https://github.com/user-attachments/assets/d99a5c12-50cc-431b-999f-8133df1908f5" />
-</td>
-<td><img width="1919" height="916" alt="image" src="https://github.com/user-attachments/assets/3c8fa6c4-9703-416a-bc8a-aa875739e1f8" /></td>
-<td><img width="1919" height="908" alt="image" src="https://github.com/user-attachments/assets/d9349cf1-588f-4e01-95e5-4c8312c04701" />
-</td>
+<td><img src="./screenshots/checkout.png" alt="Checkout" width="250"/></td>
+<td><img src="./screenshots/payment.png" alt="Payment" width="250"/></td>
+<td><img src="./screenshots/order-confirmation.png" alt="Order Confirmation" width="250"/></td>
 </tr>
 <tr>
 <td align="center"><strong>Checkout</strong></td>
@@ -58,25 +54,17 @@
 ### 👑 **Admin Dashboard**
 <table>
 <tr>
-<td><img width="1919" height="798" alt="image" src="https://github.com/user-attachments/assets/06f996d9-6cfd-47e7-ab15-f106257a769b" />
-</td>
-<td><img width="1919" height="899" alt="image" src="https://github.com/user-attachments/assets/305acd7e-40aa-4367-a1db-ce2c436dca0b" />
-
-</td>
+<td><img src="./screenshots/admin-dashboard.png" alt="Admin Dashboard" width="400"/></td>
+<td><img src="./screenshots/admin-products.png" alt="Product Management" width="400"/></td>
 </tr>
 <tr>
-<td align="center"><strong>Order Mangement</strong></td>
+<td align="center"><strong>Dashboard</strong></td>
 <td align="center"><strong>Product Management</strong></td>
 </tr>
 </table>
 
 ### 📱 **Mobile Responsive**
-<img width="357" height="803" alt="image" src="https://github.com/user-attachments/assets/45f276cb-e8c9-4da5-946c-2cbecdd9bf6d" />
-<img width="363" height="802" alt="image" src="https://github.com/user-attachments/assets/50415478-e8ce-41b3-a4c4-36b132f5a52a" />
-<img width="359" height="803" alt="image" src="https://github.com/user-attachments/assets/be368403-6be4-4606-9e49-eed4780eac63" />
-<img width="357" height="801" alt="image" src="https://github.com/user-attachments/assets/82af4f9f-17c6-430f-9a32-ec4d0c943c1f" />
-
-
+![Mobile Views](./screenshots/mobile-views.png)
 
 </div>
 
