@@ -226,8 +226,8 @@ graph TD
 
 ### **Customer API**
 ```http
-POST   /api/auth/login           # 🔐 User authentication
-POST   /api/auth/register        # 📝 New user signup
+POST   /api/users/auth           # 🔐 User authentication
+POST   /api/users/register       # 📝 New user signup
 GET    /api/products             # 📱 Product catalog
 POST   /api/orders               # 🛒 Place order
 GET    /api/orders/mine          # 📋 User orders
@@ -240,7 +240,7 @@ POST   /api/products             # ➕ Create product
 PUT    /api/products/:id         # ✏️ Update product
 DELETE /api/products/:id         # 🗑️ Delete product
 GET    /api/orders               # 📦 All orders
-PUT    /api/orders/:id/ship      # 🚚 Mark as shipped
+PUT    /api/orders/:id/deliver   # 🚚 Mark as delivered
 GET    /api/users                # 👥 All users
 ```
 
@@ -265,32 +265,116 @@ GET    /api/users                # 👥 All users
 
 ```
 tech-cart/
-├── 📸 screenshots/              # Project images & demos
-│   ├── demo.gif                # Main demo video
-│   ├── homepage.png            # Landing page
-│   ├── products.png            # Product catalog
-│   ├── cart.png                # Shopping cart
-│   ├── checkout.png            # Checkout process
-│   ├── payment.png             # Payment page
-│   ├── order-confirmation.png  # Order success
-│   ├── admin-dashboard.png     # Admin overview
-│   ├── admin-products.png      # Product management
-│   └── mobile-views.png        # Mobile responsive
-├── 🎨 frontend/                 # React application
-│   ├── src/
-│   │   ├── components/         # Reusable UI components
-│   │   ├── pages/             # Route components
-│   │   ├── store/             # Redux store & slices
-│   │   ├── services/          # API service layer
-│   │   └── utils/             # Helper functions
-│   └── public/                # Static assets
-├── ⚡ backend/                  # Express server
-│   ├── controllers/           # Route handlers
-│   ├── models/               # MongoDB schemas
-│   ├── routes/               # API endpoints
-│   ├── middleware/           # Custom middleware
-│   └── utils/                # Server utilities
-└── 📦 package.json            # Project configuration
+├── 📦 package.json             # Root dependencies & scripts
+├── 🔧 .env                     # Environment variables
+├── 📝 README.md                # Project documentation  
+├── 🚫 .gitignore              # Git ignore patterns
+├── 🌱 seeder.js               # Database seeder script
+├──
+├── 📸 screenshots/             # Project demo images
+│   ├── demo.gif               # Main application demo
+│   ├── homepage.png           # Landing page screenshot
+│   ├── products.png           # Product catalog view
+│   ├── cart.png               # Shopping cart interface
+│   ├── checkout.png           # Checkout process flow
+│   ├── payment.png            # Payment gateway integration
+│   ├── order-confirmation.png # Order success page
+│   ├── admin-dashboard.png    # Admin control panel
+│   ├── admin-products.png     # Product management
+│   └── mobile-views.png       # Mobile responsive design
+├──
+├── ⚡ backend/                 # Express.js API Server
+│   ├── 🚀 server.js           # Main server entry point
+│   ├── 🌱 seeder.js           # Database population script
+│   ├──
+│   ├── 📁 config/             # Server configuration
+│   │   └── db.js              # MongoDB connection setup
+│   ├──
+│   ├── 🎮 controllers/        # Business logic handlers
+│   │   ├── userController.js  # User authentication & management
+│   │   ├── productController.js # Product CRUD operations
+│   │   └── orderController.js # Order processing logic
+│   ├──
+│   ├── 🗃️ models/             # MongoDB schemas
+│   │   ├── User.js            # User data model
+│   │   ├── Product.js         # Product data model  
+│   │   └── Order.js           # Order data model
+│   ├──
+│   ├── 🛡️ middleware/         # Custom middleware functions
+│   │   ├── authMiddleware.js  # JWT authentication
+│   │   └── errorMiddleware.js # Error handling
+│   ├──
+│   ├── 🛤️ routes/             # API endpoint definitions
+│   │   ├── userRoutes.js      # User-related routes
+│   │   ├── productRoutes.js   # Product-related routes
+│   │   ├── orderRoutes.js     # Order-related routes
+│   │   └── uploadRoutes.js    # File upload routes
+│   ├──
+│   ├── 🔧 utils/              # Utility functions
+│   │   └── generateToken.js   # JWT token generation
+│   └──
+│   └── 📊 data/               # Sample/seed data
+│       ├── users.js           # Sample user accounts
+│       └── products.js        # Sample product catalog
+├──
+└── 🎨 frontend/               # React.js Client Application
+    ├── 📦 package.json        # Frontend dependencies
+    ├── 🎨 tailwind.config.js   # Tailwind CSS configuration
+    ├──
+    ├── 📁 public/             # Static assets
+    │   ├── index.html         # Main HTML template
+    │   └── favicon.ico        # Application icon
+    ├──
+    └── 📁 src/                # React source code
+        ├── 🚀 index.js        # React application entry
+        ├── 📱 App.js          # Main App component
+        ├── 🎨 index.css       # Global styling
+        ├── 🏪 store.js        # Redux store configuration
+        ├── 📋 constants.js    # Application constants
+        ├──
+        ├── 🧩 components/     # Reusable UI components
+        │   ├── Header.js      # Navigation header
+        │   ├── Footer.js      # Site footer
+        │   ├── Product.js     # Product card component
+        │   ├── Rating.js      # Star rating display
+        │   ├── Message.js     # Alert/notification component
+        │   ├── Loader.js      # Loading spinner
+        │   ├── Paginate.js    # Pagination controls
+        │   ├── SearchBox.js   # Product search functionality
+        │   ├── ProductCarousel.js # Featured products slider
+        │   ├── CheckoutSteps.js # Checkout progress indicator
+        │   ├── FormContainer.js # Form wrapper component
+        │   ├── PrivateRoute.js # Protected route wrapper
+        │   └── AdminRoute.js  # Admin-only route wrapper
+        ├──
+        ├── 📄 screens/        # Page-level components
+        │   ├── HomeScreen.js       # Homepage with products
+        │   ├── ProductScreen.js    # Product details page
+        │   ├── CartScreen.js       # Shopping cart page
+        │   ├── LoginScreen.js      # User login form
+        │   ├── RegisterScreen.js   # User registration
+        │   ├── ProfileScreen.js    # User profile management
+        │   ├── ShippingScreen.js   # Shipping address form
+        │   ├── PaymentScreen.js    # Payment method selection
+        │   ├── PlaceOrderScreen.js # Order review & placement
+        │   ├── OrderScreen.js      # Individual order details
+        │   ├── UserListScreen.js   # Admin: user management
+        │   ├── UserEditScreen.js   # Admin: edit user
+        │   ├── ProductListScreen.js # Admin: product listing
+        │   ├── ProductEditScreen.js # Admin: edit product
+        │   └── OrderListScreen.js  # Admin: order management
+        ├──
+        ├── 🗂️ slices/         # Redux state slices
+        │   ├── authSlice.js        # Authentication state
+        │   ├── cartSlice.js        # Shopping cart state  
+        │   ├── apiSlice.js         # Base RTK Query API
+        │   ├── usersApiSlice.js    # User API endpoints
+        │   ├── productsApiSlice.js # Product API endpoints
+        │   ├── ordersApiSlice.js   # Order API endpoints
+        │   └── uploadApiSlice.js   # File upload endpoints
+        └──
+        └── 🔧 utils/          # Utility functions
+            └── cartUtils.js   # Cart calculation helpers
 ```
 
 ---
